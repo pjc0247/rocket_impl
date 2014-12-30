@@ -58,6 +58,8 @@ if preview == true
   puts "\n"
 end
 
+exit if dsts == nil
+
 puts "OUTPUTS"
 dsts.each do |outpath|
   puts "out - #{outpath}"
