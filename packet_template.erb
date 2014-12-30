@@ -1,0 +1,46 @@
+/* pgen auto-generated packets */
+#pragma once
+
+typedef int packet_type_t;
+typedef int packet_size_t;
+
+struct PacketHeader{
+  packet_size_t size;
+  packet_type_t type;
+};
+#define PACKET(name) \
+  struct name : PacketHeader{\
+    name(){ \
+      memset(this, 0, sizeof(name)); \
+      type = PT_##name; \
+      size = sizeof(name); \
+    };
+#define END };
+
+#define PACKET_VERSION <%=$_crc%>
+
+enum packet_id{
+<%$_packets.each do |packet|%>
+  PT_<%=packet.name%> = <%=packet.id%>,
+<%end%>
+
+  PT_PacketMax
+};
+
+/* ENUMS */
+<%$_enums.each do |enum|%>
+enum <%=enum.name%>{
+  <%enum.items.each do |item|%>
+  <%=item%>,<%end%>
+};
+<%end%>
+
+/* PACKETS */
+#pragma pack (push, 1)
+
+<%$_packets.each do |packet|%>
+<%=packet.dump%>
+
+
+<%end%>
+#pragma pack (pop)
