@@ -31,7 +31,7 @@ $_crc_old = [0,0]
 $_crc = 0
 
 def update_crc value
-  tmp = Zlib::crc32 value
+  tmp = Zlib::crc32 value.to_s
   $_crc = Zlib::crc32_combine tmp, $_crc_old[0], $_crc_old[1]
   $_crc_old = [$_crc, value.length]
 end

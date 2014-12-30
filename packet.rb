@@ -3,10 +3,10 @@ $_packets = Array.new
 class Packet
   def initialize
     self.class.items.each do |item|
-      instance_variable_set ("@" + item[0]).to_sym, item[1]
+      instance_variable_set ("@" + item[0].to_s).to_sym, item[1]
 
       self.class.class_eval {
-        attr_accessor (item[0]).to_sym
+        attr_accessor item[0]
       }
     end
   end
@@ -17,17 +17,17 @@ class Packet
     size = 0
 
     self.class.items.each do |item|
-      key = item[0]; value = item[1]
+      key = item[0].to_s; value = item[1]
       type = item[2]
 
       ary.push instance_variable_get ("@"+key).to_sym
 
       case type
-        when "int"
+        when :int
           size += 4
-        when "string"
+        when :string
           size += item[3]+1
-		when "float"
+		when :float
 		  size += 4
       end
       
@@ -43,7 +43,7 @@ class Packet
     body = "PACKET(#{self.name})\n"
 
     self.items.each do |item|
-      key = item[0]; value = item[1]
+      key = item[0].to_s; value = item[1]
       type = item[2]
 
       case type
@@ -65,7 +65,7 @@ class Packet
     for i in 0..result.size-3
       key = self.items[i][0]
       
-      obj.instance_variable_set ("@"+key).to_sym, result[i+2]
+      obj.instance_variable_set ("@"+key.to_s).to_sym, result[i+2]
     end
 
     return obj
